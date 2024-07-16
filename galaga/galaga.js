@@ -27,23 +27,23 @@ const enemyPadding = 40;
 const enemyOffsetTop = 30;
 const enemyOffsetLeft = 50;
 const enemys = [];
-var enemyWidth = enemy.naturalWidth/2.5;
-var enemyHeight = enemy.naturalHeight/2.5;
+var enemyWidth = enemy.naturalWidth / 2.5;
+var enemyHeight = enemy.naturalHeight / 2.5;
 
-class Player{
+class Player {
     constructor() {
 
         this.velocity = {
             x: 0,
             y: 0
         }
-        
+
         this.rotation = 0
         this.opacity = 1
 
-        
+
         var ship = new Image();
-        ship.src = "SpaceInvader/PNG/playerShip2_blue.png"
+        ship.src = "galaga/SpaceInvader/PNG/playerShip2_blue.png"
         ship.onload = () => {
             const scale = 0.5
             this.image = ship
@@ -52,21 +52,21 @@ class Player{
             this.position = {
                 x: canvas.width / 2 - this.width / 2,
                 y: canvas.height - this.height - 20
-        }
+            }
         }
     }
-    draw() {   
+    draw() {
         ctx.save();
         ctx.globalAlpha = this.opacity
         ctx.translate(player.position.x + player.width / 2, player.position.y + player.height / 2);
         ctx.rotate(this.rotation)
 
         ctx.translate(-player.position.x - player.width / 2, -player.position.y - player.height / 2);
-        
+
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
         ctx.restore();
     }
-    
+
     update() {
         if (this.image) {
             this.draw();
@@ -77,19 +77,19 @@ class Player{
 }
 
 class Projectile {
-    constructor({position, velocity}) {
+    constructor({ position, velocity }) {
         this.position = position;
         this.velocity = velocity;
 
         this.radius = 4;
     }
     draw() {
-    ctx.beginPath()
+        ctx.beginPath()
         ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
         ctx.fillStyle = 'blue'
         ctx.fill()
-    ctx.closePath()
-    }   
+        ctx.closePath()
+    }
 
     update() {
         this.draw()
@@ -99,7 +99,7 @@ class Projectile {
 }
 
 class Particle {
-    constructor({position, velocity, radius, color, fades}) {
+    constructor({ position, velocity, radius, color, fades }) {
         this.position = position;
         this.velocity = velocity;
 
@@ -111,26 +111,26 @@ class Particle {
     draw() {
         ctx.save()
         ctx.globalAlpha = this.opacity
-    ctx.beginPath()
+        ctx.beginPath()
         ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
         ctx.fillStyle = this.color
         ctx.fill()
         ctx.closePath()
         ctx.restore()
-    }   
+    }
 
     update() {
         this.draw()
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
-        if(this.fades)
-        this.opacity -= 0.01
+        if (this.fades)
+            this.opacity -= 0.01
     }
 }
 
 class InvaderProjectile {
-    constructor({position, velocity}) {
+    constructor({ position, velocity }) {
         this.position = position;
         this.velocity = velocity;
 
@@ -140,7 +140,7 @@ class InvaderProjectile {
     draw() {
         ctx.fillStyle = 'white'
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }   
+    }
 
     update() {
         this.draw()
@@ -190,19 +190,19 @@ class Grid {
             this.velocity.y = 30
         }
 
-    
+
     }
-} 
+}
 
 class Invader {
-    constructor({position}) {
+    constructor({ position }) {
 
         this.velocity = {
             x: 0,
             y: 0
         }
         var ship = new Image();
-        ship.src = "SpaceInvader/PNG/Enemies/enemyBlack1.png"
+        ship.src = "galaga/SpaceInvader/PNG/Enemies/enemyBlack1.png"
         ship.onload = () => {
             const scale = 0.4
             this.image = ship
@@ -211,19 +211,19 @@ class Invader {
             this.position = {
                 x: position.x,
                 y: position.y
-        }
+            }
         }
     }
-    draw() {   
+    draw() {
         ctx.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
-        
+
     }
-    
-    update({ velocity}) {
+
+    update({ velocity }) {
         if (this.image) {
             this.draw();
-            this.position.x += velocity.x ;
-             this.position.y += velocity.y;
+            this.position.x += velocity.x;
+            this.position.y += velocity.y;
         }
     }
 
@@ -238,7 +238,7 @@ class Invader {
                 y: 5
             }
         }))
-        
+
     }
 
 }
@@ -263,7 +263,7 @@ const keys = {
 }
 
 let frames = 0
-let randomInterval = Math.floor(Math.random() * 500 + 500) 
+let randomInterval = Math.floor(Math.random() * 500 + 500)
 let game = {
     over: false,
     active: true
@@ -283,11 +283,11 @@ for (let i = 0; i < 100; i++) {
         },
         radius: Math.random() * 2,
         color: 'white',
-        
+
     }))
 }
-                        
-function createParticles({object, color, fades}) {
+
+function createParticles({ object, color, fades }) {
     for (let i = 0; i < 15; i++) {
         particles.push(new Particle({
             position: {
@@ -302,29 +302,29 @@ function createParticles({object, color, fades}) {
             radius: Math.random() * 4,
             color: color || 'purple',
             fades
-            
+
         }))
     }
 }
 
 function animate() {
-    if(!game.active) return
+    if (!game.active) return
     requestAnimationFrame(animate)
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     player.update();
     particles.forEach((particle, i) => {
 
         if (particle.position.y - particle.radius >= canvas.height) {
             particle.position.x = Math.random() * canvas.width
-             particle.position.y = -particle.radius
+            particle.position.y = -particle.radius
         }
         if (particle.opacity <= 0) {
             setTimeout(() => {
-                 particles.splice(i,1)
+                particles.splice(i, 1)
             }, 0)
-           
+
         } else {
             particle.update()
         }
@@ -352,28 +352,28 @@ function animate() {
             setTimeout(() => {
                 game.active = false
             }, 1000)
-            
+
             createParticles({
-                object: player, 
+                object: player,
                 color: 'blue',
                 fades: true
-                                })
+            })
         }
         invaderProjectile.update()
     })
 
-    
+
     projectiles.forEach((projectile, index) => {
 
         if (projectile.position.y + projectile.radius <= 0) {
             setTimeout(() => {
                 projectiles.splice(index, 1)
             }, 0)
-            
+
         } else {
             projectile.update()
         }
-        
+
     })
 
     grids.forEach((grid, gridIndex) => {
@@ -382,50 +382,50 @@ function animate() {
         if (frames % 100 == 0 && grid.invaders.length > 0) {
             grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(invaderProjectiles)
         }
-        
-            grid.invaders.forEach((invader, i) => {
-                invader.update({ velocity: grid.velocity })
 
-                //projectiles hit enemy
-                projectiles.forEach((projectile, j) => {
-                    if (projectile.position.y - projectile.radius <=
-                        invader.position.y + invader.height && projectile.position.x + projectile.radius >=
-                        invader.position.x && projectile.position.x - projectile.radius <= invader.position.x + invader.width &&
-                        projectile.position.y + projectile.radius >= invader.position.y) {
-                        
-                        
-                        setTimeout(() => {
-                            const invaderFound = grid.invaders.find(invader2 => invader2 == invader)
-                            const projectileFound = projectiles.find(
-                                projectile2 => projectile2 == projectile)
+        grid.invaders.forEach((invader, i) => {
+            invader.update({ velocity: grid.velocity })
+
+            //projectiles hit enemy
+            projectiles.forEach((projectile, j) => {
+                if (projectile.position.y - projectile.radius <=
+                    invader.position.y + invader.height && projectile.position.x + projectile.radius >=
+                    invader.position.x && projectile.position.x - projectile.radius <= invader.position.x + invader.width &&
+                    projectile.position.y + projectile.radius >= invader.position.y) {
+
+
+                    setTimeout(() => {
+                        const invaderFound = grid.invaders.find(invader2 => invader2 == invader)
+                        const projectileFound = projectiles.find(
+                            projectile2 => projectile2 == projectile)
                         y
-                            // remove invader and projectiles and create explosions
-                            if (invaderFound && projectileFound) {
-                                score += 100
-                                scoreEl.innerHTML = score
-                                createParticles({
-                                    object: invader,
-                                    fades: true
-                                })
-                                
-                                grid.invaders.splice(i, 1)
-                                projectiles.splice(j, 1)  
+                        // remove invader and projectiles and create explosions
+                        if (invaderFound && projectileFound) {
+                            score += 100
+                            scoreEl.innerHTML = score
+                            createParticles({
+                                object: invader,
+                                fades: true
+                            })
 
-                                if (grid.invaders.length > 0) {
-                                    const firstInvader = grid.invaders[0]
-                                    const lastInvader = grid.invaders[grid.invaders.length - 1]
+                            grid.invaders.splice(i, 1)
+                            projectiles.splice(j, 1)
 
-                                    grid.width = lastInvader.position.x - firstInvader.position.x + lastInvader.width
-                                    grid.position.x = firstInvader.position.x
-                                } else{
-                                    grids.splice(gridIndex, 1)
-                                }
+                            if (grid.invaders.length > 0) {
+                                const firstInvader = grid.invaders[0]
+                                const lastInvader = grid.invaders[grid.invaders.length - 1]
+
+                                grid.width = lastInvader.position.x - firstInvader.position.x + lastInvader.width
+                                grid.position.x = firstInvader.position.x
+                            } else {
+                                grids.splice(gridIndex, 1)
                             }
-                            
-                        }, 0)
                         }
-                })
+
+                    }, 0)
+                }
             })
+        })
     })
 
     if (keys.a.pressed && player.position.x >= 0) {
@@ -442,11 +442,11 @@ function animate() {
 
     if (frames % randomInterval === 0) {
         grids.push(new Grid())
-        randomInterval = Math.floor(Math.random() * 500 + 500) 
+        randomInterval = Math.floor(Math.random() * 500 + 500)
         frames = 0
     }
 
-    
+
 
     frames++;
 }
@@ -454,7 +454,7 @@ function animate() {
 animate()
 
 addEventListener('keydown', ({ key }) => {
-    if(game.over) return
+    if (game.over) return
     switch (key) {
         case 'a':
             console.log('left');
@@ -468,15 +468,15 @@ addEventListener('keydown', ({ key }) => {
         case ' ':
             console.log('space')
             projectiles.push(new Projectile({
-        position: {
-            x: player.position.x + player.width/2,
-            y: player.position.y
-        },
-        velocity: {
-            x: 0,
-            y: -10
-        }
-}))
+                position: {
+                    x: player.position.x + player.width / 2,
+                    y: player.position.y
+                },
+                velocity: {
+                    x: 0,
+                    y: -10
+                }
+            }))
             break;
     }
 })

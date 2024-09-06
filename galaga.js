@@ -2,8 +2,14 @@ const scoreEl = document.querySelector("#scoreEl")
 const canvas = document.querySelector("canvas")
 ctx = canvas.getContext("2d");
 
-canvas.width = 1024;
-canvas.height = 576;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
 
 var enemy = new Image();
 
